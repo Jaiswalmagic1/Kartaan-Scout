@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "KARTAAN Scout",
+  "short_name": "Scout",
+  "version": "0.1.0",
+  "description": "Browser-first marketplace listing research assistant.",
+  "permissions": ["activeTab", "storage", "scripting"],
+  "background": {"service_worker":"src/background.js","type":"module"},
+  "action": {"default_popup":"src/popup.html","default_title":"KARTAAN Scout"},
+  "side_panel": {"default_path":"src/popup.html"},
+  "minimum_chrome_version":"116"
+}
