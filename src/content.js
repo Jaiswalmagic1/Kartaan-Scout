@@ -1,8 +1,9 @@
-import {detectPlatform,normalizeSnapshot} from "./lib.js";
 const clean=(v,n=4000)=>String(v??"").replace(/\s+/g," ").trim().slice(0,n);
+function detectPlatform(url=""){try{const h=new URL(url).hostname.toLowerCase();if(h==="meesho.com"||h.endsWith(".meesho.com"))return "meesho";if(h==="amazon.in"||h.endsWith(".amazon.in")||h==="amazon.com"||h.endsWith(".amazon.com"))return "amazon";if(h==="flipkart.com"||h.endsWith(".flipkart.com"))return "flipkart";}catch{}return "unknown";}
+function normalizeSnapshot(input){return {id:crypto.randomUUID(),capturedAt:new Date().toISOString(),url:input.url,platform:input.platform,fields:input.fields,evidence:input.evidence,notes:input.notes};}
 function first(selectors){for(const s of selectors){const n=document.querySelector(s);const v=n?.getAttribute?.("content")||n?.innerText||n?.textContent||"";if(clean(v))return clean(v);}return "";}
 function visible(n){if(!n?.isConnected)return false;const r=n.getBoundingClientRect(),s=getComputedStyle(n);return r.width>0&&r.height>0&&s.display!=="none"&&s.visibility!=="hidden";}
-export function collectPage(){
+function collectPage(){
  const fields={title:first(["meta[property='og:title']","h1","title"]),description:first(["meta[name='description']","meta[property='og:description']","[itemprop='description']"]),price:first(["meta[property='product:price:amount']","[itemprop='price']","[data-testid*='price']","[class*='price']"]),rating:first(["[itemprop='ratingValue']","[aria-label*='out of 5']"]),reviewCount:first(["[itemprop='reviewCount']","[class*='review-count']"]),brand:first(["[itemprop='brand']","meta[property='product:brand']"]),availability:first(["[itemprop='availability']"])};
  const evidence=Object.entries(fields).filter(([,v])=>v).map(([field,value])=>({field,value,source:"rendered-dom",confidence:.5}));
  const headings=[...document.querySelectorAll("h1,h2,h3")].filter(visible).slice(0,60).map(n=>clean(n.innerText||n.textContent,300));
