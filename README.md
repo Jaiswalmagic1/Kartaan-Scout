@@ -2,10 +2,15 @@
 
 Browser-first marketplace listing research extension. AI workflow: **Scout Intelligence**.
 
+## Download latest
+**[Download the latest source ZIP](https://github.com/Jaiswalmagic1/Kartaan-Scout/archive/refs/heads/main.zip)** — this link always downloads the current `main` branch snapshot, so it updates whenever new code is pushed.
+
+[View the repository](https://github.com/Jaiswalmagic1/Kartaan-Scout)
+
 ## Install locally
-1. Download or clone this repository.
+1. Download the latest source ZIP above and extract it.
 2. Open `chrome://extensions` in Chrome and enable **Developer mode**.
-3. Click **Load unpacked** and select the repository folder.
+3. Click **Load unpacked** and select the extracted `Kartaan-Scout-main` folder.
 4. Open a normal product page and click **Capture current page**.
 
 ## Current features
