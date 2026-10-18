@@ -1,29 +1,47 @@
-# KARTAAN Scout — Build Plan
+# KARTAAN Scout — Build Plan and Status
 
 ## Product
 - Extension: KARTAAN Scout
 - AI workflow: Scout Intelligence
 - Motto: Research first. Recommend clearly. Apply only what you approve.
 
-## Principles
-Browser-first rendered DOM only; evidence-backed recommendations; no invented metrics; local-first data; explicit approval before field filling; seller always submits manually; provider-neutral AI handoff; no cookies, hidden APIs, credential collection, access-control bypass, or remote crawling.
+## Intended product
+Scout is the research orchestration and seller-approval workspace. It gathers visible data for one listing from multiple sources, builds an evidence packet for a user-selected LLM, asks that LLM to identify the next missing source, and validates structured recommendations when returned.
 
-## Phases
-1. **Foundation:** Manifest V3, rendered page capture, local history, JSON/CSV, copy/paste prompt, approval allowlist, tests.
-2. **Research UX:** side-panel workspace, dedupe/provenance, multi-page comparison, pause/resume for manual auth, export preview.
-3. **Meesho adapter:** seller-visible listing fields and available performance metrics; public competitor pages; selectors validated by human tester; fail safely if UI changes.
-4. **Review intelligence:** categorize product defects vs packaging/shipping vs unclear listing expectations, dimensions/material/capacity and image mismatch; retain evidence and uncertainty.
-5. **AI provider interface:** schema-validated JSON; copy/paste fallback; explicit provider setup; no silent chat UI automation or hardcoded keys.
-6. **Amazon/Flipkart:** separate adapters and rules after current UI/policy verification.
-7. **Release:** SKU-level before/after history, rollback/copy-back, privacy docs, regression tests, manual QA.
+## Principles
+- Browser-first rendered DOM only, after explicit user action.
+- Evidence-backed recommendations; never invent missing facts or metrics.
+- Keep listing, seller/profile, competitor and estimated Seller Lens values separate.
+- Local-first data; export/copy only by user action.
+- One research session per product/listing.
+- Manual LLM copy/paste, with nextActions to guide iterative research.
+- Explicit human approval before copying approved field values.
+- Seller always performs final marketplace save/submit.
+- No cookies, hidden APIs, credential collection, remote crawling, CAPTCHA solving, access-control bypass or automated marketplace publishing.
+
+## Phases and status
+1. **Foundation — implemented locally:** Manifest V3, visible DOM capture, local history, JSON/CSV, copy/paste prompt, field allowlist, approval helper and Node tests.
+2. **Guided research session — implemented locally in v0.1.3:** multi-page session checklist, seller/buyer page classification, combined session prompt, AI response pasteback, next-action display.
+3. **Meesho visible-page capture — partial:** buyer product page/search cards/Seller Lens parsing improved with a real user-provided capture; seller listing/edit/performance selectors remain heuristic and need live QA in the user's supplier account.
+4. **Review intelligence — partial:** capture visible review comments and clearly distinguish unloaded reviews; categorize product-defect vs shipping/packaging vs listing-expectation themes after sufficient real comments exist.
+5. **AI provider interface — manual handoff:** provider-neutral prompt; copy/paste fallback. No silent automation of chat UIs.
+6. **Amazon/Flipkart:** separate adapters only after UI/policy verification.
+7. **Release:** source package versioning, branch/source archive, SKU-level before/after history, rollback/copy-back, regression tests and manual QA.
+
+## Current local test record (2026-10-18)
+- `npm test`: 24 passed, 0 failed in the v0.1.3 package.
+- `npm run check`: manifest entrypoints and JavaScript syntax validated.
+- ZIP integrity and root `manifest.json` checked.
+- User-supplied live Meesho page verified the primary price, 20 similar-product records and clean Seller Lens parsing for one tested layout.
 
 ## Acceptance criteria
-- Chrome loads unpacked extension.
-- Missing values stay missing.
-- Captures stay local unless exported/copied by user.
+- Chrome loads the unpacked extension.
+- Missing values remain missing; estimates remain labeled.
+- Page/source and confidence/evidence are visible enough to audit.
+- AI conflict/limitation reporting and `nextActions` guide staged research.
 - Unknown AI fields are rejected; only explicitly approved allowlisted fields are actionable.
 - No publish/submit action is automated.
-- Human QA is documented for each marketplace before claiming support.
+- Human QA is recorded for each marketplace before support is broadly claimed.
 
-## Current limitation
-This is a starter foundation, not yet a deep-research agent. Live marketplace seller-account testing is not complete.
+## Remaining work
+Live seller dashboard/listing-editor QA; review-page coverage; full manual workflow test across capture → LLM → JSON response → approval; package source into the GitHub workbench branch; only then decide whether to merge to main.

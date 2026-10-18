@@ -2,27 +2,25 @@
 
 Browser-first marketplace listing research extension. AI workflow: **Scout Intelligence**.
 
-## Download latest
-**[Download the latest source ZIP](https://github.com/Jaiswalmagic1/Kartaan-Scout/archive/refs/heads/main.zip)** — this link always downloads the current `main` branch snapshot, so it updates whenever new code is pushed.
+## Workbench branch
+The current working state is tracked on `workbench/v0.1.3-guided-research-handoff`. Start with [the handoff](docs/HANDOFF-2026-10-18.md), [guided workflow](docs/WORKFLOW.md), [AI contract](docs/AI_CONTRACT.md), and [build plan](BUILD_PLAN.md).
 
-[View the repository](https://github.com/Jaiswalmagic1/Kartaan-Scout)
+## Product intent
+Scout is a research and approval workspace, not an autonomous listing bot. It gathers visible seller-side and buyer-side evidence for one product, assembles a consolidated packet for the user's selected LLM, asks the LLM to name missing research steps and return schema-shaped proposals, and then validates those proposals for seller review.
 
-## Install locally
-1. Download the latest source ZIP above and extract it.
-2. Open `chrome://extensions` in Chrome and enable **Developer mode**.
-3. Click **Load unpacked** and select the extracted `Kartaan-Scout-main` folder.
-4. Open a normal product page and click **Capture current page**.
+## Intended workflow
+1. Start a session for one listing/SKU.
+2. Capture the seller-side listing details and any visible seller metrics.
+3. Capture the buyer-facing product page, relevant search results/competitors, and buyer reviews only when loaded.
+4. Copy a consolidated evidence packet into ChatGPT, Claude, Gemini, or another chosen LLM.
+5. Follow `nextActions` by opening the requested page and capturing it manually; paste an updated packet into the same chat.
+6. Paste the LLM's JSON response back into Scout, inspect evidence/conflicts, approve selected proposals, then copy approved values for manual entry.
+7. Seller submits/publishes manually. Scout must never auto-submit or claim a listing changed.
 
-## Current features
-- Rendered-page capture for title, price, rating/review count when visible, brand, description, availability, headings and links.
-- Local history, JSON/CSV export and copy/paste AI research prompt.
-- Proposal allowlist and explicit approval payload helper.
-- Automated Node.js tests and GitHub Actions workflow.
+## Validation status
+The local v0.1.3 package passed `npm test` (24 tests) and `npm run check` on 2026-10-18. User-provided live Meesho page evidence verified the primary price (₹207), 20 visible similar-product records, clean listing age (9 days), clean return-shipping estimate (₹157), and that supplier/profile rating must not be attributed to product rating for that tested layout.
+
+**Not yet verified:** extraction on the user's logged-in Meesho supplier listing/edit/performance pages, all review layouts, other Meesho layouts, and end-to-end AI conversation response across providers. See the handoff document for precise next steps.
 
 ## Safety
-Data is read from the visible DOM of the current tab. No marketplace APIs, cookie/session extraction, server crawling, or access-control bypass. Research stays in Chrome local storage until the user exports or copies it. Never auto-submit or publish a listing.
-
-## Status
-This is a starter foundation, not yet the full deep-research agent. Meesho is the first adapter target. Live seller-account testing is still required before claiming platform-specific support.
-
-Run tests with `npm test`. See [BUILD_PLAN.md](BUILD_PLAN.md), [manual QA](docs/MANUAL_QA.md) and [security notes](docs/SECURITY.md).
+Rendered DOM only after explicit user action. No marketplace APIs, hidden response collection, cookies/session extraction, credential collection, remote crawling, CAPTCHA solving, or access-control bypass. Captures remain local until the user exports/copies them. Missing values stay missing; estimates stay labeled as estimates; seller approval is required.
